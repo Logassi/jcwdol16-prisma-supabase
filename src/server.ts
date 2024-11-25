@@ -1,7 +1,8 @@
-import express, { Application } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { PORT } from "./configs/envConfig";
+import AuthRoute from "./routes/auth.route";
 
 export default class Server {
   private app: Application;
@@ -11,7 +12,7 @@ export default class Server {
     this.app = express();
     this.port = PORT || 8080;
     this.middlewares();
-    this.route();
+    this.routes();
   }
 
   private middlewares() {
@@ -20,8 +21,8 @@ export default class Server {
     this.app.use(express.json());
   }
 
-  private route() {
-    this.app.use("/auth");
+  private routes() {
+    this.app.use("/auth", new AuthRoute().getRoute());
   }
 
   public start() {
